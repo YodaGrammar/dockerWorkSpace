@@ -1,0 +1,63 @@
+services:
+    database:
+        image: postgres:18-alpine
+        container_name: yoda_grammar_db
+        restart: always
+        volumes: 
+            - db-data:/var/lib/postgresql
+        environment:
+            POSTGRES_USER: myuser
+            POSTGRES_PASSWORD: mypassword
+            POSTGRES_DB: mydatabase
+        ports:
+            - "5433:5432"
+        networks:
+            yg-network:
+                ipv4_address: 192.168.1.10
+    traefik:
+        image: traefik:v2.10
+        container_name: traefik
+        restart: always
+        ports:
+            - "80:80"
+            - "443:443"
+            - "8080:8080" # Dashboard Traefik
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock:ro
+            - ./.docker/traefik/traefik.yml:/etc/traefik/traefik.yml:ro
+            - ./.docker/traefik/dynamic.yml:/etc/traefik/dynamic.yml:ro
+            - ./.docker/traefik/cert:/cert:ro
+        networks:
+            cliq:
+                ipv4_address: 192.168.1.11
+        labels:
+            - "com.symfony.server.service-prefix=YODA_GRAMMAR_DB"
+
+    cliq_php:
+        build: ./.docker/php
+        container_name: yoda_grammar_php
+        restart: always
+        stop_signal: SIGINT
+        volumes:
+            - ./workspace:/app
+        labels:
+            - "traefik.enable=true"
+            - "traefik.http.routers.cliq.rule=HostRegexp(`{subdomain:[a-z0-9-]+}.cliq.docker`) || Host(`yoda_grammar.docker`)"
+            - "traefik.http.routers.cliq.entrypoints=websecure"
+            - "traefik.http.routers.cliq.tls=true"
+            - "traefik.http.services.cliq.loadbalancer.server.port=80"
+            - "com.symfony.server.service-prefix=YODA_GRAMMAR_PHP"
+        networks:
+            cliq:
+                ipv4_address: 192.168.1.12
+volumes:
+    db-data:
+
+networks:
+    cliq:
+        name: yg-network
+        driver: bridge
+        ipam:
+            driver: default
+            config:
+                - subnet: 192.168.1.0/24
