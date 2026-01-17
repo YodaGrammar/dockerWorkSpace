@@ -4,17 +4,23 @@
 }
 
 :80 {
-@subdomain {
-        header_regexp host Host ^([a-z0-9-]+)\.cliq\.docker$
-}
-
-handle @subdomain {
-                  php_server {
-                             root /app/{re.host.1}/public
-                             }
+    @subdomain {
+        header_regexp host Host ^([a-z0-9-]+)\.byg\.localhost(?::\d+)?$
     }
 
-handle {
-       respond "FrankenPHP is running - CLIQ" 200
-       }
+    handle @subdomain {
+        php_server {
+            root /app/{re.host.1}/public
+        }
+    }
+
+    handle {
+        respond "FrankenPHP is running - Yoda Grammar" 200
+    }
+
+    log {
+        level DEBUG
+        output stdout
+        format console
+    }
 }

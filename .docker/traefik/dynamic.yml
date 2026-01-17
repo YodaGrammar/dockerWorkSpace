@@ -1,9 +1,0 @@
-tls:
-    certificates:
-        - certFile: /cert/local-cert.pem
-          keyFile: /cert/local-key.pem
-    stores:
-        default:
-            defaultCertificate:
-                certFile: /cert/local-cert.pem
-                keyFile: /cert/local-key.pem

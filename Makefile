@@ -24,7 +24,7 @@ help:
 ##---------------------------------------------------------------------------
 ##
 
-generate-ssl: ## Install SSL certificate in system trust store
+ssl: ## Install SSL certificate in system trust store
 	@bash script/generate_local_certificate.sh $(SERVICE)
 
 ##

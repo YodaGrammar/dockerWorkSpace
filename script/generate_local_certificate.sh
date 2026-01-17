@@ -19,15 +19,20 @@ mkcert -uninstall 2>/dev/null
 mkcert -install
 
 # Créer le dossier
-mkdir -p ./.docker/traefik/cert
+mkdir -p ./.docker/traefik/certs
 
 # Générer les certificats
 echo -e "\n${YELLOW}Génération des certificats...${NC}"
-mkcert -cert-file ./.docker/traefik/cert/local-cert.pem \
-       -key-file ./.docker/traefik/cert/local-key.pem \
-       "*.yoda_grammar.docker" \
-       "yoda_grammar.docker" \
-       "localhost"
+mkcert -cert-file ./.docker/traefik/certs/local-cert.pem \
+       -key-file ./.docker/traefik/certs/local-key.pem \
+        "*.yg.localhost" \
+        "yg.localhost" \
+        "*.byg.localhost" \
+        "byg.localhost" \
+        "localhost"
+
+CAROOT="$(mkcert -CAROOT)"
+certutil -d sql:$HOME/.pki/nssdb -A -t "C,," -n "mkcert $(whoami)" -i "$CAROOT/rootCA.pem"
 
 echo -e "\n${GREEN}✓ Certificats générés !${NC}"
 echo -e "\n${YELLOW}⚠️  IMPORTANT:${NC}"
