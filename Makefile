@@ -25,7 +25,7 @@ help:
 ##
 
 ssl: ## Install SSL certificate in system trust store
-	@bash script/generate_local_certificate.sh $(SERVICE)
+	@bash scripts/generate_local_certificate.sh $(SERVICE)
 
 ##
 ##                                Launch
@@ -44,3 +44,12 @@ down: ## Stop containers
 
 test:  ## Run tests
 	echo "Run tests here "$(SERVICE)
+
+
+jwt-init: ## Init JWT for a project
+	@docker exec -it yg_php bash /scripts/jwt_init.sh
+
+hosts-domains: # Configure the hosts file to make containers and project accessible
+	@zsh scripts/hosts_domains.sh
+	@docker exec -it yg_php sh /scripts/hosts_domains.sh
+	@docker exec -it yg_next sh /scripts/hosts_domains.sh

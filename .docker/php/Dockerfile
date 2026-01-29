@@ -9,10 +9,11 @@ RUN php composer-setup.php
 RUN php -r "unlink('composer-setup.php');"
 RUN mv composer.phar /usr/local/bin/composer
 
-RUN apk add --no-cache \
+RUN apk add --update --no-cache \
     nss-tools \
     ca-certificates \
-    bash
+    bash \
+    su-exec
 
 RUN curl -1sLf 'https://dl.cloudsmith.io/public/symfony/stable/setup.alpine.sh' | bash
 RUN apk add --no-cache symfony-cli

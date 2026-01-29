@@ -1,4 +1,6 @@
 .DS_Store
-workSpace/*
-!workSpace/.gitkeep
+backendSpace/*
+!backendSpace/.gitkeep
+frontendSpace/*
+!frontendSpace/.gitkeep
 .idea/*

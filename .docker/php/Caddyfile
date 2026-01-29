@@ -5,7 +5,7 @@
 
 :80 {
     @subdomain {
-        header_regexp host Host ^([a-z0-9-]+)\.byg\.localhost(?::\d+)?$
+        header_regexp host Host ^([a-z0-9-]+)\.byg\.docker(?::\d+)?$
     }
 
     handle @subdomain {
