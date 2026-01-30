@@ -166,7 +166,7 @@ services:
             yoda-grammar-network:
                     ipv4_address: 172.42.0.6
         extra_hosts:
-            - "api-allinone.byg.yg.docker:172.42.0.2"
+            - "api-allinone.byg.docker:172.42.0.2"
 
 volumes:
     db-data:
